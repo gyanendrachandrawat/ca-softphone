@@ -1,4 +1,4 @@
-package com.consultadd.model;
+package com.consultadd.model.twilio;
 
 import com.twilio.rest.api.v2010.account.Message.Direction;
 import java.time.ZonedDateTime;

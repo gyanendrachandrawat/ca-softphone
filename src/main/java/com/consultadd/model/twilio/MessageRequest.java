@@ -1,4 +1,4 @@
-package com.consultadd.model;
+package com.consultadd.model.twilio;
 
 import lombok.Builder;
 import lombok.Data;

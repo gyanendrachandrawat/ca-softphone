@@ -35,7 +35,7 @@ $(function () {
       "from": from
     }
     console.log(body);
-    sendRequest("/sms/sendsms", "POST", body)
+    sendRequest("/sms/send", "POST", body)
       .then(function (data) {
         console.log(data);
         $('#button-refresh').trigger('click');
