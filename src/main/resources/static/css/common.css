@@ -8,7 +8,22 @@ p {
 
 .container {
   display: flex;
-  flex-direction: column;
+}
+
+.left-div, .right-div {
+flex-basis: 50%; /* Set the initial width of both divs to 50% */
+  max-width: 50%; /* Ensure both divs do not exceed 50% of the width */
+  padding: 10px; /* Optional: Add padding for spacing */
+  box-sizing: border-box;
+
+}
+
+.left-div {
+  background-color: #f0f0f0; /* Optional: Set background color for the left div */
+}
+
+.right-div {
+  background-color: #ccc; /* Optional: Set background color for the right div */
 }
 
 body {
@@ -176,4 +191,17 @@ button[type="submit"] {
 #loader {
   display: none;
   /* Initially hide the loader */
+}
+.table-container {
+  overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+table {
+  width: 50%; /* Ensure the table takes up the full width of the container */
+  white-space: nowrap; /* Prevent table cells from wrapping */
+}
+
+th,
+td {
+  padding: 8px; /* Optional: Add padding to table cells */
 }

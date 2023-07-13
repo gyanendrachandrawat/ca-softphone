@@ -52,11 +52,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .anyRequest()
-                .permitAll()
-                .and()
-                .formLogin()
-                .loginProcessingUrl("/login")
-                .successForwardUrl("/index");
+                .permitAll();
+        //                .and()
+        //                .formLogin()
+        //                .loginProcessingUrl("/login")
+        //                .successForwardUrl("/index");
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 }

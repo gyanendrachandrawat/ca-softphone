@@ -1,6 +1,6 @@
-function createTableFromJson(jsonData) {
+function createTableFromJson(jsonData,elementId) {
   // Get the reference to the table element in the HTML
-  const table = document.getElementById('message-table');
+  const table = document.getElementById(elementId);
 
   // Create the table header row
   const thead = document.createElement('thead');
@@ -43,7 +43,20 @@ $(function () {
 
     var inputValue = document.getElementById('myInput').value;
     $.getJSON('/sms/list?from=' + inputValue).then(function (data) {
-      createTableFromJson(data);
+      createTableFromJson(data,'message-table');
+    })
+    loader.hide();
+  })
+});
+$(function () {
+  $("#button-refresh-call").click(function () {
+    console.log("called")
+    var loader = $('#loader');
+    loader.show();
+
+    var inputValue = document.getElementById('myInput').value;
+    $.getJSON('/call/logs?from=' + inputValue).then(function (data) {
+      createTableFromJson(data,'call-logs-table');
     })
     loader.hide();
   })

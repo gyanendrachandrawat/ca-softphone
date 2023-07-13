@@ -63,11 +63,19 @@ document.querySelector('form').addEventListener('submit', function (event) {
         device.on("incoming", function (conn) {
           log("Incoming connection from " + conn.parameters.From);
           // accept the incoming connection and start two-way audio
+          document.getElementById("button-call").style.display = "none";
           document.getElementById("button-answer").style.display = "inline";
+          document.getElementById("button-hangup").style.display = "inline";
           $("#button-answer").click(function () {
             document.getElementById("button-answer").style.display = "none";
+
             conn.accept();
           });
+          $("#button-hangup").click(function () {
+                      document.getElementById("button-hangup").style.display = "none";
+
+                      conn.reject();
+           });
         });
 
         setClientNameUI(data.identity);

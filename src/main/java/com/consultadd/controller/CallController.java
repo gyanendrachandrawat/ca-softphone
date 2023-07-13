@@ -8,10 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/call")
@@ -47,12 +50,27 @@ public class CallController {
     }
 
     @PostMapping(value = "/voicemail", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<Object> recordVoiceMail() {
+    public ResponseEntity<Object> recordVoiceMail(@RequestParam Map<String, Object> params) {
+        log.info("Params {}, ",params);
         return ResponseEntity.ok(callService.recordVoiceMail());
     }
 
     @PostMapping(value = "/hangup", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Object> hangupCall() {
         return ResponseEntity.ok(callService.hangupCall());
+    }
+
+    @GetMapping("/logs")
+    public ResponseEntity<Object> listAllCalls(@RequestParam(value = "from") String from) {
+        return ResponseEntity.ok(callService.listAllCalls(from));
+    }
+
+    @PostMapping(value = "/handlerecordings")
+    public ResponseEntity<Object> handleVoiceMailRecordings(
+            @RequestParam(value = "RecordingUrl") String recordingUrl,
+            @RequestParam(value = "CallSid") String callSid,
+            @RequestParam(value = "AccountSid") String accountSid) {
+        callService.handleVoiceMailRecordings(recordingUrl, callSid, accountSid);
+        return ResponseEntity.ok().build();
     }
 }

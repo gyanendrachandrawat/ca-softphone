@@ -4,79 +4,91 @@
 <head>
     <meta charset="UTF-8">
     <title>CA SoftPhone</title>
-    <link th:href="@{/css/common.css}" rel="stylesheet" />
+    <link th:href="@{/css/common.css}" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="container">
-        <div id="controls" class="box">
-            <div id="info">
-                <p class="instructions">CA SoftPhone</p>
-                <div>
-                    <form>
-                        <input type="text" id="myInput" value="" placeholder="Add your twilio number here and hit submit">
-                        <input type="submit" value="Submit">
-                    </form>
-                </div>
-                <div id="client-name"></div>
-                <div id="output-selection">
-                    <label>Ringtone Devices</label>
-                    <select id="ringtone-devices" multiple></select>
-                    <label>Speaker Devices</label>
-                    <select id="speaker-devices" multiple></select><br />
-                    <a id="get-devices">Seeing unknown devices?</a>
-                </div>
-            </div>
-            <div id="call-controls">
-                <p class="instructions">Make a Call:</p>
-                <input id="phone-number" type="text" placeholder="Enter a phone number" />
-                <button id="button-call">Call</button>
-                <button id="button-answer" style="Display:None;">Answer Incoming Call</button>
-                <button id="button-hangup">Hangup</button>
-                <div id="volume-indicators">
-                    <label>Mic Volume</label>
-                    <div id="input-volume"></div>
-                    <br /><br />
-                    <label>Speaker Volume</label>
-                    <div id="output-volume"></div>
-                </div>
-            </div>
-            <div id="log"></div>
-
-
-        </div>
-        <div class="box">
-            <form>
-                <div class="form-group">
-                    <label for="to">To:</label>
-                    <input type="text" id="to" name="to" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
-                </div>
-                <button class="btn btn-primary" id="send-msg">Submit</button>
-            </form>
-        </div>
-        <div class="box">
+<div class="container">
+    <div id="controls" class="box left-div">
+        <div id="info">
+            <p class="instructions">CA SoftPhone</p>
             <div>
-                <button id="button-refresh" class="btn btn-secondary">Refresh</button>
-                <div class="table-responsive">
-                    <div id="loader">Loading...</div>
-                    <table class="table" id="message-table"></table>
-                </div>
+                <form>
+                    <input type="text" id="myInput" value="" placeholder="Add your twilio number here and hit submit">
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <div id="client-name"></div>
+            <div id="output-selection">
+                <label>Ringtone Devices</label>
+                <select id="ringtone-devices" multiple></select>
+                <label>Speaker Devices</label>
+                <select id="speaker-devices" multiple></select><br/>
+                <a id="get-devices">Seeing unknown devices?</a>
+            </div>
+        </div>
+        <div id="call-controls">
+            <p class="instructions">Make a Call:</p>
+            <input id="phone-number" type="text" placeholder="Enter a phone number"/>
+            <button id="button-call">Call</button>
+            <button id="button-answer" style="Display:None;">Answer Incoming Call</button>
+            <button id="button-hangup">Hangup</button>
+            <div id="volume-indicators">
+                <label>Mic Volume</label>
+                <div id="input-volume"></div>
+                <br/><br/>
+                <label>Speaker Volume</label>
+                <div id="output-volume"></div>
+            </div>
+        </div>
+        <div id="log"></div>
+
+
+    </div>
+    <div class="box right-div">
+        <form>
+            <div class="form-group">
+                <label for="to">To:</label>
+                <input type="text" id="to" name="to" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
+            </div>
+            <button class="btn btn-primary" id="send-msg">Submit</button>
+        </form>
+    </div>
+
+</div>
+<div class="container">
+    <div class="left-div box">
+        <div>
+            <button id="button-refresh-call" class="btn btn-secondary">Refresh Call Logs</button>
+            <div class="table-responsive table-container">
+                <table class="table" id="call-logs-table"></table>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="//sdk.twilio.com/js/client/releases/1.13.1/twilio.js"></script>
-    <script src="https://media.twiliocdn.com/sdk/js/chat/v5.0/twilio-chat.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/start.js}"></script>
-    <script type="text/javascript" th:src="@{/js/table.js}"></script>
-    <script type="text/javascript" th:src="@{/js/http-util.js}"></script>
+    <div class="right-div box">
+        <div>
+            <button id="button-refresh" class="btn btn-secondary">Refresh Messages</button>
+            <div class="table-responsive table-container">
+                <div id="loader">Loading...</div>
+                <table class="table" id="message-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="//sdk.twilio.com/js/client/releases/1.13.1/twilio.js"></script>
+<script src="https://media.twiliocdn.com/sdk/js/chat/v5.0/twilio-chat.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/start.js}"></script>
+<script type="text/javascript" th:src="@{/js/table.js}"></script>
+<script type="text/javascript" th:src="@{/js/http-util.js}"></script>
 
 
 </body>
