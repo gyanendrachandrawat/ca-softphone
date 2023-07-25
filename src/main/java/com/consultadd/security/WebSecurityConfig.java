@@ -53,10 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest()
                 .permitAll();
-        //                .and()
-        //                .formLogin()
-        //                .loginProcessingUrl("/login")
-        //                .successForwardUrl("/index");
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 }
