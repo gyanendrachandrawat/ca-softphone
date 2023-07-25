@@ -5,11 +5,10 @@ import com.consultadd.model.UserInfo;
 import com.twilio.jwt.accesstoken.AccessToken;
 import com.twilio.jwt.accesstoken.ChatGrant;
 import com.twilio.jwt.accesstoken.VoiceGrant;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserInfoService {
@@ -29,8 +28,7 @@ public class UserInfoService {
     @Value("${twilio.api.secret}")
     private String apiSecret;
 
-    @Autowired
-    private Identity identities;
+    @Autowired private Identity identities;
 
     public UserInfo createToken(String identity) {
 

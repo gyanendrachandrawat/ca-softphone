@@ -2,12 +2,9 @@ package com.consultadd.model;
 
 import com.consultadd.model.audit.Auditable;
 import com.consultadd.model.enums.JobType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,9 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.nio.charset.StandardCharsets;
-import java.util.Set;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
@@ -30,8 +29,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class User extends Auditable {
-    @Id
-    private Long id;
+    @Id private Long id;
 
     private String firstName;
     private String lastName;
@@ -51,10 +49,10 @@ public class User extends Auditable {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany
-    private Set<Contact> contacts;
+    @OneToMany private Set<Contact> contacts;
 
     public UUID getClientId() {
-        return UUID.nameUUIDFromBytes((this.id + this.twilioNumber).getBytes(StandardCharsets.UTF_8));
+        return UUID.nameUUIDFromBytes(
+                (this.id + this.twilioNumber).getBytes(StandardCharsets.UTF_8));
     }
 }

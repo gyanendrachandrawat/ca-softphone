@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserController {
 
-    @Autowired
-    private UserInfoService userService;
+    @Autowired private UserInfoService userService;
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @PostMapping(value = "/token")
