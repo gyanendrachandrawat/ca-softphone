@@ -131,12 +131,15 @@ public class CallService {
     }
 
     public void handleVoiceMailRecordings(String recordingUrl, String callSid, String accountSid) {
-        Call call =null;
+        Call call = null;
 
-        Iterator<com.twilio.rest.api.v2010.account.Call> childCallIterator = com.twilio.rest.api.v2010.account.Call.reader()
-                .setParentCallSid( callSid)
-                .limit(1).read(twilioRestClient).iterator();
-        if(childCallIterator.hasNext()){
+        Iterator<com.twilio.rest.api.v2010.account.Call> childCallIterator =
+                com.twilio.rest.api.v2010.account.Call.reader()
+                        .setParentCallSid(callSid)
+                        .limit(1)
+                        .read(twilioRestClient)
+                        .iterator();
+        if (childCallIterator.hasNext()) {
             call = Call.fromCall(childCallIterator.next());
         }
         log.info("Call info {}", call);

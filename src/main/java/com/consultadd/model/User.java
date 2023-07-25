@@ -1,12 +1,18 @@
 package com.consultadd.model;
 
 import com.consultadd.model.audit.Auditable;
+import com.consultadd.model.enums.JobType;
+import java.util.Set;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,18 +30,27 @@ import lombok.Setter;
 public class User extends Auditable {
     @Id private Long id;
 
+    private String firstName;
+    private String lastName;
+    private String email;
+
     @Column(unique = true)
-    private String clientId;
+    private String twilioNumber;
 
     private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    private JobType jobType;
+
+    private String company;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    private String firstName;
-    private String lastName;
+    @OneToMany private Set<Contact> contacts;
 
-    @Column(unique = true)
-    private String twilioNumber;
+    public UUID getClientId() {
+        return UUID.fromString(this.id + this.twilioNumber);
+    }
 }

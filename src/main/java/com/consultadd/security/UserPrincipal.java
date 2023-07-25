@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,11 +25,11 @@ public class UserPrincipal implements UserDetails {
     private Long id;
     private Collection<? extends GrantedAuthority> authorities;
     private String username;
-    @JsonIgnore private String clientId;
+    @JsonIgnore private UUID clientId;
     @JsonIgnore private String password;
 
     public UserPrincipal(
-            Long id, String clientId, String password, List<GrantedAuthority> authorities) {
+            Long id, UUID clientId, String password, List<GrantedAuthority> authorities) {
         this.id = id;
         this.clientId = clientId;
         this.password = password;

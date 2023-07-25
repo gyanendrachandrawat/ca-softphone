@@ -2,6 +2,7 @@ package com.consultadd.controller;
 
 import com.consultadd.service.CallService;
 import com.twilio.twiml.TwiMLException;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 @Controller
 @RequestMapping("/call")
@@ -51,7 +50,7 @@ public class CallController {
 
     @PostMapping(value = "/voicemail", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Object> recordVoiceMail(@RequestParam Map<String, Object> params) {
-        log.info("Params {}, ",params);
+        log.info("Params {}, ", params);
         return ResponseEntity.ok(callService.recordVoiceMail());
     }
 

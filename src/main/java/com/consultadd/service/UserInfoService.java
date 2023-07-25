@@ -44,7 +44,7 @@ public class UserInfoService {
 
         ChatGrant chatGrant = new ChatGrant();
         chatGrant.setServiceSid(chatSid);
-        // Create access token
+
         AccessToken accessToken =
                 new AccessToken.Builder(acctSid, apiKey, apiSecret)
                         .grants(List.of(grant, chatGrant))
