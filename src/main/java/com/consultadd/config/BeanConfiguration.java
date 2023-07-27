@@ -1,6 +1,5 @@
 package com.consultadd.config;
 
-import com.consultadd.Identity;
 import com.consultadd.security.UserPrincipal;
 import com.twilio.Twilio;
 import com.twilio.http.TwilioRestClient;
@@ -25,11 +24,6 @@ public class BeanConfiguration {
     public TwilioRestClient getTwilioClient() {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         return Twilio.getRestClient();
-    }
-
-    @Bean
-    public Identity getIdentityBean() {
-        return Identity.getInstance();
     }
 
     @Bean

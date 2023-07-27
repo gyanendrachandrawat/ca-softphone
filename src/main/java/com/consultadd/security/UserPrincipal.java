@@ -27,13 +27,19 @@ public class UserPrincipal implements UserDetails {
     private String username;
     @JsonIgnore private UUID clientId;
     @JsonIgnore private String password;
+    @JsonIgnore private String twilioNumber;
 
     public UserPrincipal(
-            Long id, UUID clientId, String password, List<GrantedAuthority> authorities) {
+            Long id,
+            UUID clientId,
+            String password,
+            List<GrantedAuthority> authorities,
+            String twilioNumber) {
         this.id = id;
         this.clientId = clientId;
         this.password = password;
         this.authorities = authorities;
+        this.twilioNumber = twilioNumber;
     }
 
     public static UserPrincipal create(User user) {
@@ -41,7 +47,12 @@ public class UserPrincipal implements UserDetails {
                 Collections.singletonList(
                         new SimpleGrantedAuthority(user.getRole().getRole().name()));
 
-        return new UserPrincipal(user.getId(), user.getClientId(), user.getPassword(), authorities);
+        return new UserPrincipal(
+                user.getId(),
+                user.getClientId(),
+                user.getPassword(),
+                authorities,
+                user.getTwilioNumber());
     }
 
     @Override

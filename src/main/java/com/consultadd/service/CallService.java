@@ -1,6 +1,7 @@
 package com.consultadd.service;
 
-import com.consultadd.Identity;
+import static com.consultadd.util.TwilioUtility.isPhoneNumber;
+
 import com.consultadd.model.twilio.Call;
 import com.consultadd.model.twilio.MessageRequest;
 import com.consultadd.util.Constants;
@@ -16,19 +17,20 @@ import com.twilio.twiml.voice.Record;
 import com.twilio.twiml.voice.Say;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CallService {
-    @Autowired private Identity identities;
-    @Autowired private TwilioRestClient twilioRestClient;
-
-    @Autowired private MessageService messageService;
+    private final UserService userService;
+    private final TwilioRestClient twilioRestClient;
+    private final MessageService messageService;
 
     public String createVoiceResponse(String to, String from) {
         VoiceResponse voiceTwimlResponse;
@@ -36,7 +38,11 @@ public class CallService {
         if (to != null) {
 
             Dial.Builder dialBuilder =
-                    new Dial.Builder().callerId(identities.getPhoneById(from.substring(7)));
+                    new Dial.Builder()
+                            .callerId(
+                                    userService
+                                            .findByClientId(from.substring(7))
+                                            .getTwilioNumber());
 
             Dial.Builder dialBuilderWithReceiver = addChildReceiver(dialBuilder, to);
             dialBuilderWithReceiver.action("/call/voicemail").method(HttpMethod.POST).timeout(30);
@@ -58,7 +64,9 @@ public class CallService {
         VoiceResponse voiceTwimlResponse;
 
         Say say = new Say.Builder(Constants.REDIRECT_WAIT_MESSAGE).build();
-        Client client = new Client.Builder(identities.getIdentityByPhone(to)).build();
+        Client client =
+                new Client.Builder(userService.findByTwilioNumber(to).getClientId().toString())
+                        .build();
 
         Dial dial = new Dial.Builder().client(client).build();
 
@@ -72,11 +80,6 @@ public class CallService {
             return builder.number(new Number.Builder(to).build());
         }
         return builder.client(new Client.Builder(to).build());
-    }
-
-    // validate the phone number
-    private boolean isPhoneNumber(String to) {
-        return to.matches("^[\\d\\+\\-\\(\\) ]+$");
     }
 
     public String recordVoiceMail() {
@@ -93,7 +96,7 @@ public class CallService {
                         .timeout(30)
                         .transcribe(true)
                         .action("/call/hangup")
-                        .recordingStatusCallback("/call/handlerecordings")
+                        .recordingStatusCallback("/call/recording")
                         .method(HttpMethod.POST)
                         .recordingStatusCallbackMethod(HttpMethod.POST)
                         .build();
@@ -131,7 +134,7 @@ public class CallService {
     }
 
     public void handleVoiceMailRecordings(String recordingUrl, String callSid, String accountSid) {
-        Call call = null;
+        Optional<Call> call = Optional.empty();
 
         Iterator<com.twilio.rest.api.v2010.account.Call> childCallIterator =
                 com.twilio.rest.api.v2010.account.Call.reader()
@@ -140,14 +143,18 @@ public class CallService {
                         .read(twilioRestClient)
                         .iterator();
         if (childCallIterator.hasNext()) {
-            call = Call.fromCall(childCallIterator.next());
+            call = Optional.ofNullable(Call.fromCall(childCallIterator.next()));
         }
-        log.info("Call info {}", call);
-        messageService.sendMessage(
-                MessageRequest.builder()
-                        .from(call.getFrom())
-                        .to(call.getTo())
-                        .body("You have a new voice mail. " + recordingUrl)
-                        .build());
+        call.ifPresent(
+                c -> {
+                    log.info("Call info {}", c);
+                    messageService.sendMessage(
+                            c.getFrom(),
+                            MessageRequest.builder()
+                                    .to(c.getTo())
+                                    .body("You have a new voice mail. ")
+                                    .mediaUrl(recordingUrl)
+                                    .build());
+                });
     }
 }

@@ -18,6 +18,7 @@ public class Call {
     private String sid;
     private ZonedDateTime dateCreated;
     private ZonedDateTime dateUpdated;
+    private String parentCallSid;
 
     public static Call fromCall(com.twilio.rest.api.v2010.account.Call call) {
         return Call.builder()
@@ -30,6 +31,7 @@ public class Call {
                 .sid(call.getSid())
                 .dateCreated(call.getDateCreated())
                 .dateUpdated(call.getDateUpdated())
+                .parentCallSid(call.getParentCallSid())
                 .build();
     }
 }

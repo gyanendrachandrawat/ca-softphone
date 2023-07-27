@@ -12,7 +12,7 @@ document.querySelector('form').addEventListener('submit', function (event) {
     var smsForm = document.getElementById('smsForm');
 
     log('Requesting Capability Token...');
-    $.getJSON('/user/token?phoneNumber=' + inputValue)
+    $.getJSON('/device/token?phoneNumber=' + inputValue)
       .then(function (data) {
         log("Got a token.");
         console.log("Token: " + data.token);

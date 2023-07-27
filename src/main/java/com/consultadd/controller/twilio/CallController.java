@@ -1,31 +1,33 @@
-package com.consultadd.controller;
+package com.consultadd.controller.twilio;
 
+import com.consultadd.security.UserPrincipal;
 import com.consultadd.service.CallService;
 import com.twilio.twiml.TwiMLException;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/call")
 @Slf4j
+@RequiredArgsConstructor
 public class CallController {
 
-    @Autowired CallService callService;
+    private final CallService callService;
 
-    @RequestMapping(
-            value = "/voice",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "/voice", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Object> getConnectClientVoice(
             @RequestParam(value = "To", required = false) String to,
             @RequestParam(value = "From", required = false) String from)
@@ -35,10 +37,7 @@ public class CallController {
         return new ResponseEntity<>(xml, HttpStatus.OK);
     }
 
-    @RequestMapping(
-            value = "/direct-client",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "/direct-client", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Object> getDirectClientVoice(
             @RequestParam(value = "To", required = false) String to,
             @RequestParam(value = "From", required = false) String from)
@@ -50,7 +49,6 @@ public class CallController {
 
     @PostMapping(value = "/voicemail", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Object> recordVoiceMail(@RequestParam Map<String, Object> params) {
-        log.info("Params {}, ", params);
         return ResponseEntity.ok(callService.recordVoiceMail());
     }
 
@@ -60,16 +58,25 @@ public class CallController {
     }
 
     @GetMapping("/logs")
-    public ResponseEntity<Object> listAllCalls(@RequestParam(value = "from") String from) {
-        return ResponseEntity.ok(callService.listAllCalls(from));
+    public ResponseEntity<Object> listAllCalls() {
+        return ResponseEntity.ok(callService.listAllCalls(getPrincipal().getTwilioNumber()));
     }
 
-    @PostMapping(value = "/handlerecordings")
+    @PostMapping(value = "/recording")
     public ResponseEntity<Object> handleVoiceMailRecordings(
             @RequestParam(value = "RecordingUrl") String recordingUrl,
             @RequestParam(value = "CallSid") String callSid,
             @RequestParam(value = "AccountSid") String accountSid) {
         callService.handleVoiceMailRecordings(recordingUrl, callSid, accountSid);
         return ResponseEntity.ok().build();
+    }
+
+    private UserPrincipal getPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken
+                || authentication.getPrincipal() == null) {
+            throw new BadCredentialsException("Access is denied.");
+        }
+        return (UserPrincipal) authentication.getPrincipal();
     }
 }

@@ -2,6 +2,7 @@ package com.consultadd.model.twilio;
 
 import com.twilio.rest.api.v2010.account.Message.Direction;
 import java.time.ZonedDateTime;
+import java.util.Map;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class Message {
     private ZonedDateTime dateSent;
     private ZonedDateTime dateUpdated;
     private Direction direction;
+    private Map<String, String> subresourceUris;
 
     public static Message fromMessage(com.twilio.rest.api.v2010.account.Message message) {
         return Message.builder()
@@ -25,6 +27,7 @@ public class Message {
                 .dateSent(message.getDateSent())
                 .dateUpdated(message.getDateUpdated())
                 .direction(message.getDirection())
+                .subresourceUris(message.getSubresourceUris())
                 .build();
     }
 }

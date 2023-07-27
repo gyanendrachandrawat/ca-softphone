@@ -1,10 +1,10 @@
-package com.consultadd.controller;
+package com.consultadd.controller.twilio;
 
 import com.consultadd.model.UserInfo;
 import com.consultadd.security.UserPrincipal;
 import com.consultadd.service.UserInfoService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/device")
+@RequestMapping("/device")
+@RequiredArgsConstructor
 @Slf4j
-public class UserController {
+public class DeviceController {
 
-    @Autowired private UserInfoService userService;
+    private final UserInfoService userService;
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @PostMapping(value = "/token")

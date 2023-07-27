@@ -2,7 +2,6 @@ package com.consultadd.model;
 
 import com.consultadd.model.audit.Auditable;
 import com.consultadd.model.enums.JobType;
-import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -36,6 +35,9 @@ public class User extends Auditable {
     private String email;
 
     @Column(unique = true)
+    private UUID clientId;
+
+    @Column(unique = true, length = 12)
     private String twilioNumber;
 
     private String password;
@@ -50,9 +52,4 @@ public class User extends Auditable {
     private Role role;
 
     @OneToMany private Set<Contact> contacts;
-
-    public UUID getClientId() {
-        return UUID.nameUUIDFromBytes(
-                (this.id + this.twilioNumber).getBytes(StandardCharsets.UTF_8));
-    }
 }
