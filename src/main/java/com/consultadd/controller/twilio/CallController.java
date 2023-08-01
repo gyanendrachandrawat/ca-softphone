@@ -65,9 +65,8 @@ public class CallController {
     @PostMapping(value = "/recording")
     public ResponseEntity<Object> handleVoiceMailRecordings(
             @RequestParam(value = "RecordingUrl") String recordingUrl,
-            @RequestParam(value = "CallSid") String callSid,
-            @RequestParam(value = "AccountSid") String accountSid) {
-        callService.handleVoiceMailRecordings(recordingUrl, callSid, accountSid);
+            @RequestParam(value = "CallSid") String callSid) {
+        callService.handleVoiceMailRecordings(recordingUrl, callSid);
         return ResponseEntity.ok().build();
     }
 

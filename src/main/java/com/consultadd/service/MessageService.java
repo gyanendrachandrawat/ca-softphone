@@ -44,7 +44,7 @@ public class MessageService {
                                 new com.twilio.type.PhoneNumber(request.getTo()),
                                 new com.twilio.type.PhoneNumber(from),
                                 request.getBody())
-                        .setMediaUrl(request.getMediaUrl())
+                        //                        .setMediaUrl(request.getMediaUrl())
                         .create(twilioRestClient);
 
         return Message.fromMessage(message);

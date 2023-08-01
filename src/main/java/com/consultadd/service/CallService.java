@@ -114,26 +114,26 @@ public class CallService {
     }
 
     public Set<Call> listAllCalls(String from) {
-        ResourceSet<com.twilio.rest.api.v2010.account.Call> sentmessages =
+        ResourceSet<com.twilio.rest.api.v2010.account.Call> outgoingCalls =
                 com.twilio.rest.api.v2010.account.Call.reader()
                         .setFrom(from)
                         .read(twilioRestClient);
 
-        ResourceSet<com.twilio.rest.api.v2010.account.Call> receivedMessages =
+        ResourceSet<com.twilio.rest.api.v2010.account.Call> receivedCalls =
                 com.twilio.rest.api.v2010.account.Call.reader().setTo(from).read(twilioRestClient);
         Set<Call> response =
                 new TreeSet<>(
                         Comparator.comparing(Call::getDateCreated, Comparator.reverseOrder()));
-        for (com.twilio.rest.api.v2010.account.Call call : sentmessages) {
+        for (com.twilio.rest.api.v2010.account.Call call : outgoingCalls) {
             response.add(Call.fromCall(call));
         }
-        for (com.twilio.rest.api.v2010.account.Call call : receivedMessages) {
+        for (com.twilio.rest.api.v2010.account.Call call : receivedCalls) {
             response.add(Call.fromCall(call));
         }
         return response;
     }
 
-    public void handleVoiceMailRecordings(String recordingUrl, String callSid, String accountSid) {
+    public void handleVoiceMailRecordings(String recordingUrl, String callSid) {
         Optional<Call> call = Optional.empty();
 
         Iterator<com.twilio.rest.api.v2010.account.Call> childCallIterator =
@@ -152,8 +152,7 @@ public class CallService {
                             c.getFrom(),
                             MessageRequest.builder()
                                     .to(c.getTo())
-                                    .body("You have a new voice mail. ")
-                                    .mediaUrl(recordingUrl)
+                                    .body("You have a new voice mail. " + recordingUrl)
                                     .build());
                 });
     }
