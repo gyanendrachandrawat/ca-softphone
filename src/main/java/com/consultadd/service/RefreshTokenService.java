@@ -59,7 +59,7 @@ public class RefreshTokenService {
     }
 
     private void verifyRefreshToken(RefreshToken refreshToken) {
-        if (!refreshToken.getIsValid()) {
+        if (Boolean.FALSE.equals(refreshToken.getIsValid())) {
             invalidatePreviousTokens(refreshToken.getUser().getId());
             throw new ApplicationException("Refresh Token is invalid. Please login again");
         }

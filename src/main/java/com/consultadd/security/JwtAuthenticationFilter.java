@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final Pattern BEARER_PATTERN = Pattern.compile("^Bearer (.+?)$");
+    private static final Pattern BEARER_PATTERN = Pattern.compile("^Bearer (.+)$");
 
     private final UserDetailsServiceImpl userDetailsService;
 

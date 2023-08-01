@@ -31,8 +31,6 @@ public class MessageController {
 
     @PostMapping("/send")
     public ResponseEntity<Message> sendSms(@RequestBody MessageRequest request) {
-        System.out.println(getPrincipal().getTwilioNumber());
-        System.out.println(request.toString());
         return ResponseEntity.ok(
                 messageService.sendMessage(getPrincipal().getTwilioNumber(), request));
     }
