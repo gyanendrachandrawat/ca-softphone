@@ -63,14 +63,13 @@ public class CallService {
     public String getRedirectToClientVoiceResponse(String to) {
         VoiceResponse voiceTwimlResponse;
 
-        Say say = new Say.Builder(Constants.REDIRECT_WAIT_MESSAGE).build();
         Client client =
                 new Client.Builder(userService.findByTwilioNumber(to).getClientId().toString())
                         .build();
 
         Dial dial = new Dial.Builder().client(client).build();
 
-        voiceTwimlResponse = new VoiceResponse.Builder().say(say).dial(dial).build();
+        voiceTwimlResponse = new VoiceResponse.Builder().dial(dial).build();
         return voiceTwimlResponse.toXml();
     }
 

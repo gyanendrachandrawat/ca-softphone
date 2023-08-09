@@ -22,8 +22,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         .orElseThrow(
                                 () ->
                                         new UsernameNotFoundException(
-                                                "The email provided is not registered. Please"
-                                                    + " check the email address and try again."));
+                                                "The email provided is not registered. Please check"
+                                                        + " the email address and try again."));
         return UserPrincipal.create(user);
     }
 

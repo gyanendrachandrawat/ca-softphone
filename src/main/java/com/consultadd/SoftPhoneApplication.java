@@ -4,13 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-public class TwiliodemoApplication {
+@EnableWebMvc
+public class SoftPhoneApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TwiliodemoApplication.class, args);
+        SpringApplication.run(SoftPhoneApplication.class, args);
     }
 
     @Bean
@@ -22,4 +24,14 @@ public class TwiliodemoApplication {
             }
         };
     }
+
+    //    @Bean
+    //    public Docket api() {
+    //        return new Docket(DocumentationType.SWAGGER_2)
+    //                .select()
+    //                .apis(RequestHandlerSelectors.basePackage("com.consultadd.controller"))
+    //                .paths(PathSelectors.any())
+    //                .build()
+    //                .pathMapping("/");
+    //    }
 }

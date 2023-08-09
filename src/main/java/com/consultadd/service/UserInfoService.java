@@ -1,6 +1,6 @@
 package com.consultadd.service;
 
-import com.consultadd.model.UserInfo;
+import com.consultadd.model.twilio.DeviceInfo;
 import com.twilio.jwt.accesstoken.AccessToken;
 import com.twilio.jwt.accesstoken.ChatGrant;
 import com.twilio.jwt.accesstoken.VoiceGrant;
@@ -28,13 +28,12 @@ public class UserInfoService {
     @Value("${twilio.api.secret}")
     private String apiSecret;
 
-    public UserInfo createToken(String identity) {
+    public DeviceInfo createToken(String identity) {
 
         return createJsonAccessToken(identity);
     }
 
-    private UserInfo createJsonAccessToken(String identity) {
-        UserInfo user = new UserInfo();
+    private DeviceInfo createJsonAccessToken(String identity) {
 
         VoiceGrant grant = new VoiceGrant();
         grant.setOutgoingApplicationSid(applicationSid);
@@ -51,9 +50,6 @@ public class UserInfoService {
 
         String token = accessToken.toJwt();
 
-        user.setIdentity(identity);
-        user.setToken(token);
-
-        return user;
+        return new DeviceInfo(identity, token);
     }
 }

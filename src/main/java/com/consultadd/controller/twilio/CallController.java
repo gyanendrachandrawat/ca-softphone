@@ -1,18 +1,15 @@
 package com.consultadd.controller.twilio;
 
-import com.consultadd.security.UserPrincipal;
 import com.consultadd.service.CallService;
+import com.consultadd.util.AuthenticationUtility;
 import com.twilio.twiml.TwiMLException;
+import java.security.Principal;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,8 +55,10 @@ public class CallController {
     }
 
     @GetMapping("/logs")
-    public ResponseEntity<Object> listAllCalls() {
-        return ResponseEntity.ok(callService.listAllCalls(getPrincipal().getTwilioNumber()));
+    public ResponseEntity<Object> listAllCalls(Principal principal) {
+        return ResponseEntity.ok(
+                callService.listAllCalls(
+                        AuthenticationUtility.getPrincipal(principal).getTwilioNumber()));
     }
 
     @PostMapping(value = "/recording")
@@ -68,14 +67,5 @@ public class CallController {
             @RequestParam(value = "CallSid") String callSid) {
         callService.handleVoiceMailRecordings(recordingUrl, callSid);
         return ResponseEntity.ok().build();
-    }
-
-    private UserPrincipal getPrincipal() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof AnonymousAuthenticationToken
-                || authentication.getPrincipal() == null) {
-            throw new BadCredentialsException("Access is denied.");
-        }
-        return (UserPrincipal) authentication.getPrincipal();
     }
 }
